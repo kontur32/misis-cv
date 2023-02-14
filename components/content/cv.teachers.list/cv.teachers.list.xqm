@@ -28,7 +28,15 @@ declare function cv.teachers.list:main($params as map(*)){
         then(
           if($анкета/sha256/text()=$sch256)
           then(['', ''])
-          else([<a href="{'/simplex/misis/api/v1/cv/' || $fio}">CV</a>, 'font-weight-bold'])
+          else(
+            if($i/cell[@label="Статус анкеты"]='проверена')
+            then(
+              [<a href="{'/simplex/misis/api/v1/cv/' || $fio}">CV</a>, 'font-weight-bold text-success']
+            )
+            else(
+              [<a href="{'/simplex/misis/api/v1/cv/' || $fio}">CV</a>, 'font-weight-bold']
+            )
+          )   
         )
         else(['нет анкеты', ''])
     return
@@ -42,7 +50,7 @@ declare function cv.teachers.list:main($params as map(*)){
       'количествоПреподавателей':$статистика?1,
       'количествоЗагруженныхАнкет':$статистика?2,
       'количествоКоличествоЗаполненных':$статистика?3,
-      'количествоПроверенныхАнкет':'0'
+      'количествоПроверенныхАнкет':$статистика?4
     }
 };
 
@@ -53,16 +61,19 @@ function cv.teachers.list:статистика(
   $sch256 as xs:string
 ){
   let $фио := $преподаватели/cell[@label="Ф.И.О."]/text()
+  let $проверенные := 
+    $преподаватели[cell[@label="Статус анкеты"]='проверена']
   let $загруженныеАнкеты := 
     for $i in $фио
     where $списокАнкет[name/starts-with(text(), $i)]
     return
       $списокАнкет[name/starts-with(text(), $i)] 
-  let $незаполненныеАнкеты := $загруженныеАнкеты[sha256=$sch256] 
+  let $незаполненныеАнкеты := $загруженныеАнкеты[sha256=$sch256]
   return
     [
       count($преподаватели),
       count($загруженныеАнкеты),
-      count($незаполненныеАнкеты)
+      count($незаполненныеАнкеты),
+      count($проверенные)
     ]
 };
