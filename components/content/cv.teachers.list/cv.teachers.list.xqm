@@ -18,8 +18,9 @@ declare function cv.teachers.list:main($params as map(*)){
     let $fio := $i/cell[@label="Ф.И.О."]
     let $статусФотографии :=
       if(not(empty($списокФотографий[name[starts-with(text(), $fio)]])))
-      then(<a href="{$списокФотографий[name[starts-with(text(), $fio)]]/file/text()}"> скачать фото</a>)
+      then(<a href="{'/simplex/misis/api/v1/photos/' || $fio }"> скачать фото</a>)
       else()
+    
     let $статусАнкеты :=
       let $анкета := $списокАнкет[name[starts-with(text(), $fio)]]
       return

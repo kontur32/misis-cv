@@ -9,6 +9,28 @@ import module namespace config = "https://misis.ru/simplex/misis/api/v1/config"
 
 declare
   %rest:GET
+  %rest:path ("/simplex/misis/api/v1/photos/{$person}")
+function  getCV:getPotho($person as xs:string)
+{
+  let $списокФотографий := getCV:getListPothos()
+  let $имяФотографииПользователя :=
+    $списокФотографий//resource[starts-with(name/text(),$person)]/name/text()
+  let $Content-Disposition := "attachment; filename=" || iri-to-uri($имяФотографииПользователя)
+  return
+    (
+       <rest:response>
+        <http:response status="200">
+          <http:header name="Content-Disposition" value="{$Content-Disposition}" />
+          <http:header name="Content-type" value="application/octet-stream"/>
+        </http:response>
+      </rest:response>,  
+       resource:запросРесурса('МИСИС/Анкеты 2023/Анкеты преподавателей/Фотографии преподавателей/' || $имяФотографииПользователя)
+    )
+ 
+};
+
+declare
+  %rest:GET
   %rest:path ("/simplex/misis/api/v1/photos")
 function  getCV:getListPothos()
 {
@@ -16,6 +38,7 @@ function  getCV:getListPothos()
     'МИСИС/Анкеты 2023/Анкеты преподавателей/Фотографии преподавателей'
   )
 };
+
 declare
   %rest:GET
   %rest:path ("/simplex/misis/api/v1/cv")
@@ -62,9 +85,12 @@ declare
   %public
 function getCV:фотография($person) as xs:base64Binary*
 {
+  let $списокФотографий := getCV:getListPothos()
+  let $имяФотографииПользователя :=
+    $списокФотографий//resource[starts-with(name/text(),$person)]/name/text()
   let $path :=
     'МИСИС/Анкеты 2023/Анкеты преподавателей/' ||
-    'Фотографии преподавателей/' || $person || '.jpg'
+    'Фотографии преподавателей/' || $имяФотографииПользователя
   return
     resource:запросРесурса($path)
 };
