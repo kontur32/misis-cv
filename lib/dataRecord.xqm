@@ -3,8 +3,11 @@ module namespace dataRecord = 'https://misis.ru/app/cv/dataRecord';
 
 declare
   %public
-function dataRecord:record($data as element(file)) as element(table)
-{
+function dataRecord:record(
+  $data as element(file),
+  $фотография as xs:base64Binary*
+) as element(table)
+{ 
   let $таблицаАнкетныеДанные := $data//table[@label="Анкетные данные"]/row
   let $таблицаНаучныеПубликации := $data//table[@label="Научные публикации"]/row
   let $таблицаДостижения := $data//table[@label="Интересы и достижения"]/row
@@ -91,5 +94,10 @@ function dataRecord:record($data as element(file)) as element(table)
         }</cell>
       </row>
       <row id="tables">{$научныеПубликации}{$достижения}{$профессиональная}</row>
+      <row id="pictures">
+        if(not(empty($фотография)))
+        then(<cell id="Фотография">{$фотография}</cell>)
+        else()
+      </row>
     </table>
 };
