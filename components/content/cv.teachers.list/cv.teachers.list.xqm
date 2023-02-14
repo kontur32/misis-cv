@@ -8,10 +8,11 @@ declare function cv.teachers.list:main($params as map(*)){
       '.',
       '33171408-c7fb-4596-abf6-59003a6fb205'
     )
+  let $host := $params?_config('host')
   let $списокАнкет := 
-    fetch:xml('http://localhost:8984/simplex/misis/api/v1/cv')//resource
+    fetch:xml($host || '/simplex/misis/api/v1/cv')//resource
   let $списокФотографий := 
-    fetch:xml('http://localhost:8984/simplex/misis/api/v1/photos')//resource
+    fetch:xml($host || '/simplex/misis/api/v1/photos')//resource
   let $списокПреподавателей :=
     for $i in $data//table[@label="Анкеты"]/row
     let $fio := $i/cell[@label="Ф.И.О."]
