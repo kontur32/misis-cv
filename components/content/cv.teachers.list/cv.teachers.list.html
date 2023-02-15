@@ -1,8 +1,24 @@
-<div>
-  <h3>Анкеты преподавателей кафедры</h3>
-  <div>преподавателей: {{количествоПреподавателей}}</div>
-  <div>загружено анкет: {{количествоЗагруженныхАнкет}}</div>
-  <div>не заполнено анкет: {{количествоКоличествоЗаполненных}}</div>
-  <div>проверено анкет: {{количествоПроверенныхАнкет}}</div>
-  {{список}}
+<div  class="row">
+  <link href="/static/misis/preloader.css" rel="stylesheet"></link>
+  <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+  <script src="/static/misis/statistic.js"></script>
+  
+  <h3 class="col-12">Анкеты преподавателей кафедры</h3>
+  
+
+  <div class="col-md-3">
+    <div id="percentage" >
+      <p><i>идет загрузка данных ...</i></p>
+      <div class="preloader"></div>
+    </div>
+  </div>
+
+  <div class="col-md-3">
+    <div>преподавателей: {{количествоПреподавателей}}</div>
+    <div>загружено анкет: {{количествоЗагруженныхАнкет}}</div>
+    <div>не заполнено анкет: {{количествоКоличествоЗаполненных}}</div>
+    <div>проверено анкет: {{количествоПроверенныхАнкет}}</div>
+  </div>
+  <div class="col-md-6"/>
+  <div class="col-12">{{список}}</div>
 </div>
