@@ -35,7 +35,10 @@ function statistic:статистика(
 ){
   let $фио := $преподаватели/cell[@label="Ф.И.О."]/text()
   let $проверенные := 
-    $преподаватели[cell[@label="Статус анкеты"]='проверена']
+    for $i in $преподаватели[cell[@label="Статус анкеты"]/text()]
+    where $списокАнкет[starts-with(sha256/text(), $i/cell[@label="Статус анкеты"]/text())]
+    return
+      $i
   let $загруженныеАнкеты := 
     for $i in $фио
     where $списокАнкет[name/starts-with(text(), $i)]
