@@ -6,19 +6,19 @@
   <h3 class="col-12">Анкеты преподавателей</h3>
 
   <div class="col-md-2">
-    <div class="font-weight-bold text-left">Загружено</div>
+    <div class="font-weight-bold text-left">Заполнены</div>
     <div calss="position-absolute top-100 start-50 translate-middle" id="percentage" >
       <div class="preloader"></div>
     </div>
   </div>
   <div class="col-md-2">
-    <div class="font-weight-bold text-left">Проверено</div>
+    <div class="font-weight-bold text-left">Проверены</div>
     <div calss="position-absolute top-100 start-50 translate-middle" id="percentageVerifed" >
       <div class="preloader"></div>
     </div>
   </div>
 
-  <div class="col-md-2">
+  <div class="col-md-2" id="percentageVerifed">
     <div>преподавателей: {{количествоПреподавателей}}</div>
     <div>загружено анкет: {{количествоЗагруженныхАнкет}}</div>
     <div>не заполнено анкет: {{количествоКоличествоЗаполненных}}</div>
