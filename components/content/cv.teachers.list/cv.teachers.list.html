@@ -3,17 +3,22 @@
   <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
   <script src="/static/misis/statistic.js"></script>
   
-  <h3 class="col-12">Анкеты преподавателей кафедры</h3>
-  
+  <h3 class="col-12">Анкеты преподавателей</h3>
 
-  <div class="col-md-3">
-    <div id="percentage" >
-      <p><i>идет загрузка данных ...</i></p>
+  <div class="col-md-2">
+    <div class="font-weight-bold text-left">Загружено</div>
+    <div calss="position-absolute top-100 start-50 translate-middle" id="percentage" >
+      <div class="preloader"></div>
+    </div>
+  </div>
+  <div class="col-md-2">
+    <div class="font-weight-bold text-left">Проверено</div>
+    <div calss="position-absolute top-100 start-50 translate-middle" id="percentageVerifed" >
       <div class="preloader"></div>
     </div>
   </div>
 
-  <div class="col-md-3">
+  <div class="col-md-2">
     <div>преподавателей: {{количествоПреподавателей}}</div>
     <div>загружено анкет: {{количествоЗагруженныхАнкет}}</div>
     <div>не заполнено анкет: {{количествоКоличествоЗаполненных}}</div>
