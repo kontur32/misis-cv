@@ -20,27 +20,27 @@ declare function cv.teachers.list:main($params as map(*)){
       if(not(empty($списокФотографий[name[starts-with(text(), $fio)]])))
       then(<span>, <a href="{'/simplex/misis/api/v1/photos/' || $fio }">фото</a></span>)
       else()
-    
+    let $анкета := $списокАнкет[name[starts-with(text(), $fio)]]
+    let $hash := substring($анкета/sha256/text(), 1, 6)
     let $статусАнкеты :=
-      let $анкета := $списокАнкет[name[starts-with(text(), $fio)]]
-      return
-        if(not(empty($анкета)))
-        then(
-          if($анкета/sha256/text()=$sch256)
-          then(['', ''])
+      if(not(empty($анкета)))
+      then(
+        if($анкета/sha256/text()=$sch256)
+        then(['', ''])
+        else(
+          if($i/cell[@label="Статус анкеты"]=$hash)
+          then(
+            [<a href="{'/simplex/misis/api/v1/cv/' || $fio}">CV</a>, 'font-weight-bold text-success']
+          )
           else(
-            if($i/cell[@label="Статус анкеты"]='проверена')
-            then(
-              [<a href="{'/simplex/misis/api/v1/cv/' || $fio}">CV</a>, 'font-weight-bold text-success']
-            )
-            else(
-              [<a href="{'/simplex/misis/api/v1/cv/' || $fio}">CV</a>, 'font-weight-bold']
-            )
-          )   
-        )
-        else(['нет анкеты', ''])
+            [<a href="{'/simplex/misis/api/v1/cv/' || $fio}">CV</a>, 'font-weight-bold']
+          )
+        )   
+      )
+      else(['нет анкеты', ''])
+    
     return
-      <li><span class="{$статусАнкеты?2}">{$fio}</span> {$статусАнкеты?1} {$статусФотографии}</li>
+      <li><span class="{$статусАнкеты?2}">{$fio}</span>(хэш: {$hash}) {$статусАнкеты?1} {$статусФотографии}</li>
   
   let $статистика :=
       cv.teachers.list:статистика($преподаватели, $списокАнкет, $sch256) 
