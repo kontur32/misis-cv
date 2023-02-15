@@ -47,7 +47,9 @@ function dataRecord:record(
           {
             for $i in $таблицаДостижения
             let $категория := $i/cell[@label="Категория"]/text()
-            where $категория = ("Грант", "Награды")
+            where
+              $категория = ("Грант", "Награды") and
+              $i/cell[@label="Значение"]/text()
             order by $категория
             return
               <row>

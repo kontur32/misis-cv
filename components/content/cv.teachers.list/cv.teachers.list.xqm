@@ -16,6 +16,7 @@ declare function cv.teachers.list:main($params as map(*)){
   let $списокПреподавателей :=
     for $i in $преподаватели
     let $fio := $i/cell[@label="Ф.И.О."]
+    order by $fio
     let $статусФотографии :=
       if(not(empty($списокФотографий[name[starts-with(text(), $fio)]])))
       then(<span>, <a href="{'/simplex/misis/api/v1/photos/' || $fio }">фото</a></span>)
@@ -28,13 +29,12 @@ declare function cv.teachers.list:main($params as map(*)){
         if($анкета/sha256/text()=$sch256)
         then(['', ''])
         else(
-          if($i/cell[@label="Статус анкеты"]=$hash)
-          then(
-            [<a href="{'/simplex/misis/api/v1/cv/' || $fio}">CV</a>, 'font-weight-bold text-success']
-          )
-          else(
-            [<a href="{'/simplex/misis/api/v1/cv/' || $fio}">CV</a>, 'font-weight-bold']
-          )
+          let $isEdited :=
+            if($i/cell[@label="Статус анкеты"]=$hash)
+            then('font-weight-bold text-success')
+            else('font-weight-bold')
+          return
+            [<a href="{'/simplex/misis/api/v1/cv/' || $fio}">CV</a>, $isEdited]
         )   
       )
       else(['нет анкеты', ''])
