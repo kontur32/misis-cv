@@ -14,28 +14,68 @@ declare function qualification:main($params as map(*)){
     //resource[type="file"]/name/substring-before(text(), '.xlsx')[.]
   
   let $повышение :=
-    for $i in $списокАнкет
+    for $person in $списокАнкет[position()]
+    let $filePath :=
+      replace('МИСИС/Анкеты 2023/Анкеты преподавателей/%1.xlsx', '%1', $person)
     let $таблица :=
       $params?_data?getFile(
-        replace('МИСИС/Анкеты 2023/Анкеты преподавателей/%1.xlsx', '%1', $i),
+        $filePath,
         '.',
-        '33171408-c7fb-4596-abf6-59003a6fb205'
+        $params?_config('store.yandex.data')
       )//table[@label="Повышение квалификации"]
-    
-    for $r in $таблица/row
-    order by $r/cell[@label="Год"]/text() descending
-    order by $i
-    where $r/cell[@label="Год"]/text()
     return
-      <record>
-        <год>{$r/cell[@label="Год"]/text()}</год>
-        <ФИО>{$i}</ФИО>
-        <название>{$r/cell[@label="Программа"]/text()}</название>
-        <объем>{$r/cell[@label="Объем часов"]/text()}</объем>
-      </record>
-  
+      qualification:records($таблица, $person)  
   return
     map{
-      'данные':<csv>{$повышение}</csv>
+      'данные': 
+        if($params?_query-params?method = 'trci' or $params?method = 'trci')
+        then(qualification:trci(<csv>{$повышение}</csv>))
+        else(<csv>{$повышение}</csv>)
     }
+};
+
+declare
+  %private
+function qualification:trci(
+  $csv as element(csv)
+) as element(table)
+{
+  <table>
+    <row id="tables">
+      <cell id="квалификация">
+        <table>
+          {
+            for $record in $csv/record
+            return
+              <row>
+                {
+                  for $cell in $record/child::*
+                  return
+                    <cell>{$cell/text()}</cell>
+                }
+              </row>
+          }
+        </table>
+      </cell>
+    </row>
+  </table>
+};
+
+declare
+function qualification:records(
+  $таблица as element(table),
+  $person as xs:string
+) as element(record)*
+{
+  for $r in $таблица/row
+  order by $r/cell[@label="Год"]/text() descending
+  order by $person
+  where $r/cell[@label="Год"]/text()
+  return
+    <record>
+      <год>{$r/cell[@label="Год"]/text()}</год>
+      <ФИО>{$person}</ФИО>
+      <название>{$r/cell[@label="Программа"]/text()}</название>
+      <объем>{$r/cell[@label="Объем часов"]/text()}</объем>
+    </record>
 };

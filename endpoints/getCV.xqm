@@ -103,7 +103,7 @@ function  getCV:get($person)
     resource:файлTRCI('МИСИС/Анкеты 2023/Анкеты преподавателей/' || $person || '.xlsx')
   let $фотография := getCV:фотография($person)
   let $данныеДляФормы := dataRecord:record($парсингАнкеты, $фотография)  
-  let $заполненнаяФорма := getCV:заполнитьФорму($данныеДляФормы) 
+  let $заполненнаяФорма := getCV:заполнитьФорму($данныеДляФормы, getCV:шаблон()) 
   let $Content-Disposition := "attachment; filename=" || iri-to-uri($person) || '.docx'
   return
     (
@@ -125,11 +125,16 @@ function getCV:фотография($person) as xs:base64Binary*
   let $имяФотографииПользователя :=
     $списокФотографий//resource[starts-with(name/text(),$person)]/name/text()
   let $path :=
-    'МИСИС/Анкеты 2023/Анкеты преподавателей/' ||
-    'Фотографии преподавателей/' || $имяФотографииПользователя
+    'МИСИС/Анкеты 2023/Анкеты преподавателей/Фотографии преподавателей/' ||
+    $имяФотографииПользователя
   return
     resource:запросРесурса($path)
 };
+
+declare
+  %private
+function getCV:шаблон($path) as xs:base64Binary*
+{resource:запросРесурса($path)};
 
 declare
   %private
@@ -138,8 +143,7 @@ function getCV:шаблон() as xs:base64Binary*
   resource:запросРесурса('МИСИС/Анкеты 2023/Образцы/CV-шаблон КИК МИСИС.docx')
 };
 
-declare function getCV:заполнитьФорму($данныеДляФормы){
- let $шаблон := getCV:шаблон()
+declare function getCV:заполнитьФорму($данныеДляФормы, $шаблон){
  let $request :=
     <http:request method='post'>
       <http:multipart media-type = "multipart/form-data" >

@@ -56,19 +56,23 @@ declare function funct:tpl( $app, $params ){
   
   let $tpl := function($app, $params){funct:tpl($app, $params)}
   let $config := function($param){config:param($param)}
-  let $getFile := function($path, $xq, $storeID){getData:getFile($path, $xq, $storeID)}
   let $getData := 
     map{
-      'getFile' : $getFile,
+      'getFile' : function($path, $xq, $storeID){getData:getFile($path, $xq, $storeID)},
       'getData' : function($xquery, $params){getData:getData($xquery, $params)}
     }
-  
+  let $query-params := 
+    map:merge(
+      for $i in request:parameter-names()
+      return
+        map{$i : request:parameter($i)}
+    )
   let $result :=
       xquery:eval(
           $query, 
           map{ 'params':
             map:merge( 
-              ($params, map{'_' : $tpl, '_data' : $getData, '_config' : $config})
+              ($params, map{'_' : $tpl, '_data' : $getData, '_config' : $config, '_query-params': $query-params})
             )
           }
         )
