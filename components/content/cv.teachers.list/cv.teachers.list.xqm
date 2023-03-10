@@ -40,7 +40,7 @@ declare function cv.teachers.list:main($params as map(*)){
       else(['нет анкеты', '', 'empty'])
     
     return
-      <li><span class="{$статусАнкеты?2}" id="{$fio}"  status="{$статусАнкеты?3}">{$fio}</span>(хэш: {$hash}) {$статусАнкеты?1} {$статусФотографии}</li>
+      <li><span class="{$статусАнкеты?2}" id="{$fio}"  status="{$статусАнкеты?3}" hash="{$hash}">{$fio}</span>(хэш: {$hash}) {$статусАнкеты?1} {$статусФотографии}</li>
   
   let $статистика :=
       cv.teachers.list:статистика($преподаватели, $списокАнкет, $sch256) 
