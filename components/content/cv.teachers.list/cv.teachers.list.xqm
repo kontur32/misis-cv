@@ -15,7 +15,7 @@ declare function cv.teachers.list:main($params as map(*)){
     fetch:xml($host || '/simplex/misis/api/v1/photos')//resource[type="file"]
   let $списокПреподавателей :=
     for $i in $преподаватели
-    let $fio := $i/cell[@label="Ф.И.О."]
+    let $fio := $i/cell[@label="Ф.И.О."]/text()
     order by $fio
     let $статусФотографии :=
       if(not(empty($списокФотографий[name[starts-with(text(), $fio)]])))
@@ -27,20 +27,20 @@ declare function cv.teachers.list:main($params as map(*)){
       if(not(empty($анкета)))
       then(
         if($анкета/sha256/text()=$sch256)
-        then(['', ''])
+        then(['', '', 'not edited'])
         else(
           let $isEdited :=
             if($i/cell[@label="Статус анкеты"]=$hash)
-            then('font-weight-bold text-success')
-            else('font-weight-bold')
+            then(['text-success', 'verified'])
+            else(['', 'edited'])
           return
-            [<a href="{'/simplex/misis/api/v1/cv/' || $fio}">CV</a>, $isEdited]
+            [<a href="{'/simplex/misis/api/v1/cv/' || $fio}">CV</a>, 'font-weight-bold ' || $isEdited?1, $isEdited?2]
         )   
       )
-      else(['нет анкеты', ''])
+      else(['нет анкеты', '', 'empty'])
     
     return
-      <li><span class="{$статусАнкеты?2}">{$fio}</span>(хэш: {$hash}) {$статусАнкеты?1} {$статусФотографии}</li>
+      <li><span class="{$статусАнкеты?2}" id="{$fio}"  status="{$статусАнкеты?3}">{$fio}</span>(хэш: {$hash}) {$статусАнкеты?1} {$статусФотографии}</li>
   
   let $статистика :=
       cv.teachers.list:статистика($преподаватели, $списокАнкет, $sch256) 
