@@ -8,15 +8,15 @@ function dataRecord:record(
   $фотография as xs:base64Binary*
 ) as element(table)
 { 
-  let $таблицаАнкетныеДанные := $data//table[@label="Анкетные данные"]/row
+  let $таблицаАнкетныеДанные := $data//table[@label="Анкетные данные"]/row[1]
   let $таблицаНаучныеПубликации := $data//table[@label="Научные публикации"]/row
   let $таблицаДостижения := $data//table[@label="Интересы и достижения"]/row
   let $таблицаПрофессиональная := $data//table[@label="Профессиональная деятельность"]/row
   
   let $поля := 
-      for $i in $таблицаАнкетныеДанные
+      for $i in $таблицаАнкетныеДанные/cell
       return
-        <cell id='{$i/cell[@label="Характеристика"]/text()}'>{$i/cell[@label="Значение"]/text()}</cell>
+        $i update rename node  ./@label as xs:QName('id')
   
   let $научныеПубликации := 
     <cell id="Научные публикации">

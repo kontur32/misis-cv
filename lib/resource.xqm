@@ -31,7 +31,10 @@ function resource:адресЗапроса(
          ),
          '/'
        ),
-       map{'path': $path}
+       map{
+         'path': $path,
+         'column-direction': 'Анкетные данные'
+       }
      )
    return
      xs:anyURI($href)
