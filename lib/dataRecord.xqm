@@ -106,6 +106,12 @@ function dataRecord:record(
           )
           else()
         }
+        {
+          if($поля[@id="Ученое звание, год присуждения"]/text())
+          then(
+            <cell id="Ученое звание">, доцент</cell>
+          )
+        }
       </row>
       <row id="tables">{$научныеПубликации}{$достижения}{$профессиональная}</row>
       <row id="pictures">
