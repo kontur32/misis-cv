@@ -94,6 +94,18 @@ function dataRecord:record(
           $таблицаДостижения
           [cell[@label="Категория"]='Научные интересы']/cell[@label="Значение"]/text()
         }</cell>
+        {
+          if($таблицаДостижения/cell[@label="Категория"][text()="Грант" or text()="Награды"])
+          then(
+            (
+               <cell id="_Достижения">Достижения</cell>,
+               <cell id="_Год">Год</cell>,
+               <cell id="_Категория">Категория</cell>,
+               <cell id="_Содержание">Содержание</cell>
+            )
+          )
+          else()
+        }
       </row>
       <row id="tables">{$научныеПубликации}{$достижения}{$профессиональная}</row>
       <row id="pictures">
