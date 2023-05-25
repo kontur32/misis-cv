@@ -39,8 +39,10 @@ declare function cv.teachers.list:main($params as map(*)){
       )
       else(['нет анкеты', '', 'empty'])
     
+    let $indPlanHref := 
+      "/simplex/misis/api/v1/indplan/" || $fio
     return
-      <li><span class="{$статусАнкеты?2}" id="{$fio}"  status="{$статусАнкеты?3}" hash="{$hash}">{$fio}</span>(хэш: {$hash}) {$статусАнкеты?1} {$статусФотографии}</li>
+      <li><span class="{$статусАнкеты?2}" id="{$fio}"  status="{$статусАнкеты?3}" hash="{$hash}">{$fio}</span>(хэш: {$hash}) {$статусАнкеты?1} {$статусФотографии} | <a href="{$indPlanHref}">индплан</a></li>
   
   let $статистика :=
       cv.teachers.list:статистика($преподаватели, $списокАнкет, $sch256) 
