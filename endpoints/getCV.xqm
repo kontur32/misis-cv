@@ -154,7 +154,7 @@ declare function getCV:заполнитьФорму($данныеДляФорм�
       </http:multipart> 
     </http:request> 
   let $response := 
-    http:send-request ($request, config:param('ooxml.complete.template'))
+    http:send-request ($request, "http://localhost:8984/api/v1/ooxml/docx/template/complete")
   return 
       $response[2]
 };
