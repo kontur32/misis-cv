@@ -93,6 +93,14 @@ function  getCV:getData($person) as element(file)*
   )
 };
 
+declare
+  %rest:GET
+  %rest:path ("/simplex/misis/api/v1/cv/{$person}/gender")
+function  getCV:getGender($person) as element(gender)
+{
+  funct:tpl('content/api/gender', map{"person":$person})/gender
+};
+
 
 declare
   %rest:GET
@@ -125,8 +133,17 @@ function getCV:фотография($person) as xs:base64Binary*
   let $имяФотографииПользователя :=
     $списокФотографий//resource[starts-with(name/text(),$person)]/name/text()
   let $path :=
-    'МИСИС/Анкеты 2023/Анкеты преподавателей/Фотографии преподавателей/' ||
+    if($имяФотографииПользователя)
+    then(
+      'МИСИС/Анкеты 2023/Анкеты преподавателей/Фотографии преподавателей/' ||
     $имяФотографииПользователя
+    )
+    else(
+      if(getCV:getGender($person)/text() = 'MALE')
+      then('МИСИС/Анкеты 2023/Образцы/фото-аватары/' || 'мальчик.jpg')
+      else('МИСИС/Анкеты 2023/Образцы/фото-аватары/' || 'девочка.jpg')
+    )
+    
   return
     resource:запросРесурса($path)
 };

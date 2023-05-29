@@ -52,7 +52,7 @@ function getIndplan:data($person) as element(table)
         getIndplan:request(
           $запрос,
           $context,
-         xs:anyURI("http://81.177.136.214:3030/kik-misis/sparql")
+         xs:anyURI("http://ovz2.j40045666.px7zm.vps.myjino.ru:49408/kik-misis/sparql")
        )/bindings/_
        
     let $учебнаяРабота := $data[раздел/value/text()="учебнаяРабота"]
@@ -249,7 +249,7 @@ declare function getIndplan:данныеПреподавателя($context) as 
       getIndplan:request(
         $запрос,
         $context,
-       xs:anyURI("http://81.177.136.214:3030/kik-misis/sparql")
+       xs:anyURI("http://ovz2.j40045666.px7zm.vps.myjino.ru:49408/kik-misis/sparql")
      )/bindings/_
      
   return

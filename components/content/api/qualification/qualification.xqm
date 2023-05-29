@@ -1,7 +1,6 @@
 module namespace qualification = "content/api/qualification";
 
 declare function qualification:main($params as map(*)){
-  let $sch256 := '1afd286e4f29db67ce25d6de475a6726cd41985d8f75903c8be805f1aeb00d05'
   let $преподаватели :=
     $params?_data?getFile(
       'МИСИС/Анкеты 2023/Преподаватели КИК.xlsx',

@@ -1,7 +1,7 @@
 module namespace cv.teachers.list = "content/cv.teachers.list";
 
 declare function cv.teachers.list:main($params as map(*)){
-  let $sch256 := '1afd286e4f29db67ce25d6de475a6726cd41985d8f75903c8be805f1aeb00d05'
+  let $шаблонаАнкетыSHA256 := '1afd286e4f29db67ce25d6de475a6726cd41985d8f75903c8be805f1aeb00d05'
   let $преподаватели :=
     $params?_data?getFile(
       'МИСИС/Анкеты 2023/Преподаватели КИК.xlsx',
@@ -20,13 +20,13 @@ declare function cv.teachers.list:main($params as map(*)){
     let $статусФотографии :=
       if(not(empty($списокФотографий[name[starts-with(text(), $fio)]])))
       then(<span>, <a href="{'/simplex/misis/api/v1/photos/' || $fio }">фото</a></span>)
-      else()
+      else(<span>нет фото</span>)
     let $анкета := $списокАнкет[name[starts-with(text(), $fio)]]
     let $hash := substring($анкета/sha256/text(), 1, 6)
     let $статусАнкеты :=
       if(not(empty($анкета)))
       then(
-        if($анкета/sha256/text()=$sch256)
+        if($анкета/sha256/text()=$шаблонаАнкетыSHA256)
         then(['', '', 'not edited'])
         else(
           let $isEdited :=
@@ -41,14 +41,15 @@ declare function cv.teachers.list:main($params as map(*)){
     
     let $indPlanHref := 
       "/simplex/misis/api/v1/indplan/" || $fio
+    let $gender := $params?_('content/api/gender', map{"person":$fio})
     return
-      <li><span class="{$статусАнкеты?2}" id="{$fio}"  status="{$статусАнкеты?3}" hash="{$hash}">{$fio}</span>(хэш: {$hash}) {$статусАнкеты?1} {$статусФотографии} | <a href="{$indPlanHref}">индплан</a></li>
+      <li><span class="{$статусАнкеты?2}" id="{$fio}"  status="{$статусАнкеты?3}" hash="{$hash}">{$fio}</span>(хэш: {$hash}) {$статусАнкеты?1} {$статусФотографии} | <a href="{$indPlanHref}">индплан</a>|{$gender}</li>
   
   let $статистика :=
-      cv.teachers.list:статистика($преподаватели, $списокАнкет, $sch256) 
+      cv.teachers.list:статистика($преподаватели, $списокАнкет, $шаблонаАнкетыSHA256) 
   return
     map{
-      'список':<lo>{$списокПреподавателей}</lo>,
+      'список':<ol>{$списокПреподавателей}</ol>,
       'количествоПреподавателей':$статистика?1,
       'количествоЗагруженныхАнкет':$статистика?2,
       'количествоНезаполненных':$статистика?3,
