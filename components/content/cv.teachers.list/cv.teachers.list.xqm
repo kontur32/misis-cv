@@ -14,7 +14,7 @@ declare function cv.teachers.list:main($params as map(*)){
   let $списокФотографий := 
     fetch:xml($host || '/simplex/misis/api/v1/photos')//resource[type="file"]
   let $списокПреподавателей :=
-    for $i in $преподаватели
+    for $i in $преподаватели[not(cell[@label="Дата увольнения"]/text())]
     let $fio := $i/cell[@label="Ф.И.О."]/text()
     order by $fio
     let $статусФотографии :=
