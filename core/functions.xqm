@@ -2,6 +2,8 @@ module namespace funct = "funct";
 
 import module namespace getData = "getData" at "getData.xqm";
 import module namespace config = "https://misis.ru/simplex/misis/api/v1/config" at "config.xqm";
+import module namespace rdf = "http://garpix.com/semantik/app/fuseki2"
+  at "../lib/fuseki2.client.xqm";
 
 import module namespace resource = "https://misis.ru/simplex/misis/api/v1/resource"
   at '../lib/resource.xqm';
@@ -61,6 +63,7 @@ declare function funct:tpl( $app, $params ){
       'getFile' : function($path, $xq, $storeID){getData:getFile($path, $xq, $storeID)},
       'getData' : function($xquery, $params){getData:getData($xquery, $params)}
     }
+  let $rdf := function($sparql, $endpoint){rdf:query($sparql, $endpoint)}
   let $query-params := 
     map:merge(
       for $i in request:parameter-names()
@@ -72,11 +75,11 @@ declare function funct:tpl( $app, $params ){
           $query, 
           map{ 'params':
             map:merge( 
-              ($params, map{'_' : $tpl, '_data' : $getData, '_config' : $config, '_query-params': $query-params})
+              ($params, map{'_' : $tpl, '_data' : $getData, '_config' : $config, '_rdf':$rdf, '_query-params': $query-params})
             )
           }
         )
 
   return
-     funct:xhtml( $app, $result, $componentPath )
+     funct:xhtml($app, $result, $componentPath)
 };
