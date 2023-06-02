@@ -1,0 +1,21 @@
+PREFIX : <https://semantics.misis.roz37.ru/schema/>
+PREFIX онтология: <https://semantics.misis.roz37.ru/онтология/>
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+
+SELECT (CONCAT(?фамилия, ' ', ?имя, ' ', ?отчество) AS ?фио) ?должность ?электроннаяПочта WHERE
+{
+  GRAPH ?g{
+    ?about rdf:type <https://semantics.misis.roz37.ru/онтология/Преподаватель>;
+       :фамилия ?фамилия;
+       :имя ?имя;
+       :отчество ?отчество;
+       :должность ?должность
+  }
+  	OPTIONAL{
+      GRAPH ?g2 {
+          ?about :электроннаяПочта ?электроннаяПочта
+        }
+    }
+  FILTER NOT EXISTS {GRAPH ?g{?about :датаУвольнения ?датаУвольнения}}
+}
+ORDER BY ?фамилия
