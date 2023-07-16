@@ -17,7 +17,7 @@ function indplan:нагрузка(
 {
  let $data :=
     indplan:sparql-api(
-      "http://localhost:8984",
+      $params?_config('rdf.data-host'),
       "misis",
       "нагрузка-по-преподавателю",
       $params?person
@@ -33,7 +33,7 @@ function indplan:сведения(
 {
  let $data :=
     indplan:sparql-api(
-      "http://localhost:8984",
+      $params?_config('rdf.data-host'),
       "misis",
       "сведения-о-преподавателе",
       $params?person
