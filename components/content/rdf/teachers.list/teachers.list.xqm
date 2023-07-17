@@ -59,8 +59,13 @@ declare function teachers.list:list($params){
           "/simplex/misis/api/v1/indplan/" || $fio,
           map{}
         )
+      (:
+      <a href="{$href_year}">год рождения</a> |
+      | rdf-инфа: <a href="{$href_info}">свойства субъекта</a>, <a href="{$href_info2}">субъект как свойство</a>
+      :)
+      
       return
-        <li>{$fio} ({$i/должность/text()}): <a href="{$href_year}">год рождения</a> | <a href="{$href_indplan}">индплан</a> | rdf-инфа: <a href="{$href_info}">свойства субъекта</a>, <a href="{$href_info2}">субъект как свойство</a></li>
+        <li>{$fio} ({$i/должность/text()}):  <a href="{$href_indplan}">индплан</a> </li>
     }</ol>
 };
 
