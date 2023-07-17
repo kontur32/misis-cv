@@ -67,7 +67,7 @@ declare function getIndplan:заполнитьФорму($данныеДляФо
       </http:multipart> 
     </http:request> 
   let $response := 
-    http:send-request ($request, "http://localhost:"|| request:port() ||"/api/v1/ooxml/docx/template/complete")
+    http:send-request ($request, config:param('ooxml.complete.template'))
   return 
       $response[2]
 };
