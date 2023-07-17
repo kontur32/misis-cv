@@ -9,6 +9,9 @@ import module namespace resource = "https://misis.ru/simplex/misis/api/v1/resour
 
 import module namespace funct="funct" at "../core/functions.xqm";
 
+import module namespace config = "https://misis.ru/simplex/misis/api/v1/config" 
+  at "../core/config.xqm";
+
 
 declare
   %rest:GET
@@ -17,7 +20,7 @@ function  getIndplan:get($person)
 {
   let $данныеДляФормы := getIndplan:data($person)
   let $шаблон := 
-    file:read-binary('/home/kontur32/nextcloud/misis/шаблоны/индивидуальный-план.docx')
+    file:read-binary(config:param('rdf.root-path')|| 'misis/шаблоны/индивидуальный-план.docx')
   let $заполненнаяФорма := getIndplan:заполнитьФорму($данныеДляФормы, $шаблон) 
   let $Content-Disposition := "attachment; filename=" || iri-to-uri($person || '-Индивидуальный-план') || '.docx'
   return
