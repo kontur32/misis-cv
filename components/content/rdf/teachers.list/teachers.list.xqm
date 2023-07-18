@@ -56,7 +56,7 @@ declare function teachers.list:list($params){
         )
       let $href_indplan :=
         web:create-url(
-          "/simplex/misis/api/v1/indplan/" || $fio,
+          "api/v1/indplan/" || $fio,
           map{}
         )
       (:

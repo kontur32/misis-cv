@@ -4,7 +4,7 @@ import module namespace funct="funct" at "../../core/functions.xqm";
 
 declare 
   %rest:GET
-  %rest:path("/simplex/misis/v2/u")
+  %rest:path("/simplex/misis")
   %output:method("xhtml")
   %output:doctype-public("www.w3.org/TR/xhtml11/DTD/xhtml11.dtd")
 function misis:main(){
